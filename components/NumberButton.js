@@ -2,12 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 
-export default function NumberButton({
-  index,
-  number,
-  maxNumber,
-  handleButtonPress,
-}) {
+export default function NumberButton({ number, maxNumber, handleButtonPress }) {
   if (number !== maxNumber * maxNumber) {
     return (
       <TouchableOpacity

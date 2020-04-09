@@ -17,13 +17,18 @@ const initState = {
 function reducer(state = initState, action) {
   switch (action.type) {
     case UPDATE_BOARD:
-      return {
-        gameType: state.gameType,
-        board: action.newBoard,
-        win: state.win,
-        moves: state.moves,
-        history: [...state.history, state.board],
-      };
+      if (!state.win) {
+        return {
+          gameType: state.gameType,
+          board: action.newBoard,
+          win: state.win,
+          moves: state.moves,
+          history: [...state.history, state.board],
+        };
+      } else {
+        state;
+      }
+
     case SET_GAME_TYPE:
       return {
         gameType: action.length,

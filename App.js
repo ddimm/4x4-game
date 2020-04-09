@@ -17,9 +17,17 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Start" component={StartScreen} />
-          <Stack.Screen name="GameScreen" component={GameScreen} />
+        <Stack.Navigator initialRouteName="Start">
+          <Stack.Screen
+            options={{ title: "4x4 Game" }}
+            name="Start"
+            component={StartScreen}
+          />
+          <Stack.Screen
+            options={{ title: "4x4 Game" }}
+            name="GameScreen"
+            component={GameScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
