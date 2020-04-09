@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { connect } from "react-redux";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function NumberButton({ number, maxNumber, handleButtonPress }) {
   if (number !== maxNumber * maxNumber) {

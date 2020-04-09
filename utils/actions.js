@@ -4,6 +4,7 @@ export const UPDATE_BOARD = "UPDATE_BOARD";
 export const SET_WIN = "SET_WIN";
 export const SET_MOVES = "SET_MOVES";
 export const UNDO = "UNDO";
+export const SET_HISTORY = "SET_HISTORY";
 
 export function updateBoard(newBoard) {
   return { type: UPDATE_BOARD, newBoard: newBoard };
@@ -23,4 +24,8 @@ export function setMoves(moves) {
 
 export function undo() {
   return { type: UNDO };
+}
+
+export function setHistory(history) {
+  return { type: SET_HISTORY, history };
 }

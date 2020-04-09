@@ -4,6 +4,7 @@ import {
   SET_WIN,
   SET_MOVES,
   UNDO,
+  SET_HISTORY,
 } from "./actions";
 
 const initState = {
@@ -17,17 +18,13 @@ const initState = {
 function reducer(state = initState, action) {
   switch (action.type) {
     case UPDATE_BOARD:
-      if (!state.win) {
-        return {
-          gameType: state.gameType,
-          board: action.newBoard,
-          win: state.win,
-          moves: state.moves,
-          history: [...state.history, state.board],
-        };
-      } else {
-        state;
-      }
+      return {
+        gameType: state.gameType,
+        board: action.newBoard,
+        win: state.win,
+        moves: state.moves,
+        history: [...state.history, state.board],
+      };
 
     case SET_GAME_TYPE:
       return {
@@ -63,6 +60,14 @@ function reducer(state = initState, action) {
         history: state.history.slice(0, state.history.length - 1),
       };
     }
+    case SET_HISTORY:
+      return {
+        gameType: state.gameType,
+        board: state.board,
+        win: state.win,
+        moves: state.moves,
+        history: action.history,
+      };
   }
   return state;
 }

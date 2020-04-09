@@ -1,13 +1,11 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import NumberButton from "./components/NumberButton";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createStore } from "redux";
-import reducer from "./utils/reducers";
+import React from "react";
 import { Provider } from "react-redux";
-import StartScreen from "./components/StartScreen";
+import { createStore } from "redux";
 import GameScreen from "./components/GameScreen";
+import StartScreen from "./components/StartScreen";
+import reducer from "./utils/reducers";
 
 const store = createStore(reducer);
 

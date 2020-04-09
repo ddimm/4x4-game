@@ -1,13 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { connect } from "react-redux";
-import { setGameType, updateBoard, setMoves } from "../utils/actions";
+import {
+  setGameType,
+  updateBoard,
+  setMoves,
+  setWin,
+  setHistory,
+} from "../utils/actions";
 function StartScreen({
   navigation,
   setGameType,
   board,
   updateBoard,
   setMoves,
+  setHistory,
 }) {
   return (
     <View style={styles.container}>
@@ -18,9 +25,12 @@ function StartScreen({
       <View style={styles.buttonContainer}>
         <Button
           onPress={() => {
+            setWin(false);
+            setHistory([]);
             setGameType(4);
             updateBoard([]);
             setMoves(0);
+
             navigation.navigate("GameScreen");
           }}
           title={"Start 4x4 Game"}
@@ -47,6 +57,8 @@ function mapDispatchToProps(dispatch) {
     setGameType: (num) => dispatch(setGameType(num)),
     updateBoard: (newBoard) => dispatch(updateBoard(newBoard)),
     setMoves: (moves) => dispatch(setMoves(moves)),
+    setWin: (win) => dispatch(setWin(win)),
+    setHistory: (history) => dispatch(setHistory(history)),
   };
 }
 function mapStateToProps(state) {

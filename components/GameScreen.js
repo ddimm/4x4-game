@@ -3,7 +3,14 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { connect } from "react-redux";
 import { FlatList } from "react-native-gesture-handler";
 import NumberButton from "./NumberButton";
-import { updateBoard, setWin, setMoves, undo } from "../utils/actions";
+import {
+  updateBoard,
+  setWin,
+  setMoves,
+  undo,
+  setHistory,
+  setGameType,
+} from "../utils/actions";
 
 const _ = require("lodash");
 
@@ -11,36 +18,69 @@ function GameScreen({
   gameType,
   updateBoard,
   board,
-  win,
   setWin,
   moves,
   setMoves,
   undo,
-  history,
+  win,
+  navigation,
+  setHistory,
+  setGameType,
 }) {
   const [ready, setReady] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+
   useEffect(() => {
     if (board.length <= 0) {
       let startingBoard = _.range(1, gameType * gameType + 1);
+      //   let startingBoard = [
+      //     1,
+      //     2,
+      //     3,
+      //     4,
+      //     5,
+      //     6,
+      //     7,
+      //     8,
+      //     9,
+      //     10,
+      //     11,
+      //     12,
+      //     13,
+      //     14,
+      //     16,
+      //     15,
+      //   ]; //testing board
       updateBoard(_.shuffle(startingBoard));
+      //   updateBoard(startingBoard);
+      setWin(false);
+      setGameOver(false);
       setReady(true);
     } else {
       setReady(true);
+      checkWin();
     }
-  }, []);
+  }, [board]);
 
-  async function checkWin() {
-    if (board.length > 0) {
-      for (let i = 1; i < board.length; i++) {
-        if (board[i] < board[i - 1]) {
-          return false;
+  function checkWin() {
+    const isWin = () => {
+      if (board.length > 0) {
+        for (let i = 1; i < board.length; i++) {
+          if (board[i] < board[i - 1]) {
+            return false;
+          }
         }
+        return true;
       }
-      return true;
+      return false;
+    };
+    if (isWin()) {
+      setWin(true);
+      setGameOver(true);
+      alert("You Won!");
     }
-    return false;
   }
-  async function handleButtonPress(number, index) {
+  function handleButtonPress(number, index) {
     let mappedBoard = _.chunk(board, gameType);
     let [row, col] = [Math.floor(index / gameType), index % gameType];
     let emptyTargetValue = gameType * gameType;
@@ -72,13 +112,6 @@ function GameScreen({
       updateBoard(_.flattenDeep(mappedBoard));
       setMoves(moves + 1);
     }
-    checkWin().then((isWon) => {
-      if (isWon) {
-        console.log("won");
-        setWin(isWon);
-        alert("You Won!");
-      }
-    });
   }
 
   if (ready) {
@@ -104,6 +137,29 @@ function GameScreen({
             return String(index);
           }}
         />
+        {gameOver ? (
+          <View style={styles.gameOver}>
+            <Text style={{ fontSize: 20, padding: 10 }}>
+              Good job, you won!
+            </Text>
+            <Button
+              title={"new game"}
+              onPress={() => {
+                setReady(false);
+                setGameOver(false);
+                setWin(false);
+                setHistory([]);
+                setGameType(4);
+                updateBoard([]);
+                setMoves(0);
+
+                navigation.navigate("GameScreen");
+              }}
+            ></Button>
+          </View>
+        ) : (
+          <></>
+        )}
         <View style={styles.controlContainer}>
           <Text>Moves: {moves}</Text>
           <Button disabled={moves <= 0} title="undo" onPress={undo}></Button>
@@ -131,15 +187,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "row",
     alignItems: "center",
+    margin: 10,
+  },
+  gameOver: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 function mapStateToProps(state) {
   return {
     gameType: state.gameType,
     board: state.board,
-    win: state.win,
     moves: state.moves,
-    history: state.history,
+    win: state.win,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -148,6 +210,8 @@ function mapDispatchToProps(dispatch) {
     setWin: (win) => dispatch(setWin(win)),
     setMoves: (moves) => dispatch(setMoves(moves)),
     undo: () => dispatch(undo()),
+    setHistory: (history) => dispatch(setHistory(history)),
+    setGameType: (type) => dispatch(setGameType(type)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GameScreen);
